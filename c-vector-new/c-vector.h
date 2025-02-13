@@ -11,7 +11,7 @@ void vector_push_back(vector *v, void* element, uint size);
 void vector_pop_back(vector *v);
 void vector_free(vector *v);
 void vector_push_index(vector *v, void* element, uint size, uint index, uint shift); // add an element at a given index. (shift elements depending on parameter) // only shift if shift == 1
-void vector_pop_index(vector *v, uint index, uint shift);  //remove an element at a given index. (shift elements to the left and fill the gap)
+void vector_pop_index(vector *v, uint index);  //remove an element at a given index. (shift elements to the left and fill the gap)
 
 
 // todo

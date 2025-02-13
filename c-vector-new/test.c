@@ -42,7 +42,13 @@ int main() {
     }
 
     // pop_index
-
+    puts("");
+    printf("Pop index\n");
+    vector_pop_index(&v, 0);
+    for (uint i=0; i < v.elem;i++) {
+        int num = *(int*)v.buf[i];
+        printf("The elements: %d\n", num);
+    }
 
     vector_free(&v);
     puts("");
@@ -84,7 +90,13 @@ int main() {
     }
 
     // pop_index
-
+    puts("");
+    printf("Pop index\n");
+    vector_pop_index(&s, 0);
+    for (uint i=0; i < s.elem;i++) {
+        char *e = (char*)s.buf[i];
+        printf("The elements: %s\n", e);
+    }
 
     vector_free(&s);
 }

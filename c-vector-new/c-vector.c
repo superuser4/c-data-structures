@@ -24,8 +24,9 @@ void vector_realloc(vector * v, uint size) {
 }
 
 void vector_free(vector* v) {
-    for (uint i=0;i<v->elem;i++) {
-        free(v->buf[i]);
+    // check if buf[i] is already freed
+    for (uint i=0; i<v->elem; i++) {
+        if (v->buf[i] != NULL) {free(v->buf[i]);}
     }
     free(v->buf);
     v->size = 0;
@@ -87,3 +88,28 @@ void vector_pop_back(vector *v) {
     v->size -= sizeof(void*);
 }
 
+void vector_pop_index(vector *v, uint index) {
+    if (v->size == v->elem * sizeof(void*)) {
+        int x = (sizeof(void*));
+        vector_realloc(v, -x);
+    }
+
+    for (uint i=index; i < v->elem; i++) {
+        if (v->type == 1) {
+            size_t new_size = strlen((char*)v->buf[i+1]) + 1;
+            void* tmp = realloc(v->buf[i], new_size);
+            if (tmp == NULL) {
+                fprintf(stderr, "Memory allocation failed!\n");
+                exit(1);
+            }
+            v->buf[i] = tmp;
+            strncpy(v->buf[i], v->buf[i+1], new_size);
+        } else { 
+            memcpy(v->buf[i], v->buf[i+1], v->type);
+        }
+    }
+    free(v->buf[v->elem-1]);
+    v->buf[v->elem-1] = NULL;
+    v->elem--;
+    v->size -= sizeof(void*);
+}
