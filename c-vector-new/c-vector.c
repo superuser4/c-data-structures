@@ -21,7 +21,7 @@ void vector_realloc(vector * v, uint size) {
     }
     
 }
-void vector_push(vector *v, void* element, uint size) {
+void vector_push_back(vector *v, void* element, uint size) {
     if (v->size == v->elem * sizeof(void*)) {
         vector_realloc(v, sizeof(void*));
     }
@@ -30,7 +30,7 @@ void vector_push(vector *v, void* element, uint size) {
     memcpy(v->buf[v->elem], element, size);
     v->elem++;
 }
-void vector_pop(vector *v) {
+void vector_pop_back(vector *v) {
     free(v->buf[v->elem -1]);
     v->elem--;
     v->size -= sizeof(void*);
@@ -50,9 +50,9 @@ int main() {
     vector v;
     int a = 1; int b = 2; int c = 3;
     vector_init(&v);
-    vector_push(&v, (void*)&a, sizeof(a)); // int vector
-    vector_push(&v, (void*)&b, sizeof(b));
-    vector_push(&v, (void*)&c, sizeof(c));
+    vector_push_back(&v, (void*)&a, sizeof(a)); // int vector
+    vector_push_back(&v, (void*)&b, sizeof(b));
+    vector_push_back(&v, (void*)&c, sizeof(c));
 
 
     printf("Vector element number: %u\n", v.elem);
@@ -62,7 +62,7 @@ int main() {
         printf("Vector elements: %d, size: %ld\n", num, sizeof(v.buf[i]));
     }
 
-    vector_pop(&v);
+    vector_pop_back(&v);
     for (uint i=0;i < v.elem; i++) {
         int num = *(int*)v.buf[i];
         printf("Vec elements after pop: %d\n", num);
@@ -78,8 +78,8 @@ int main() {
     
     char d[20] = "Hello Buddy Hey";
     char x[20] = "World Hello Hey";
-    vector_push(&s, (void*)&d, strlen(d));
-    vector_push(&s, (void*)&x, strlen(x));
+    vector_push_back(&s, (void*)&d, strlen(d));
+    vector_push_back(&s, (void*)&x, strlen(x));
 
 
     for (uint i=0; i < s.elem;i++) {
@@ -87,7 +87,7 @@ int main() {
     }
     printf("Vector size: %u\n", s.size);
 
-    vector_pop(&s);
+    vector_pop_back(&s);
     printf("After vector pop:\n");
     for (uint i=0; i < s.elem;i++) {
         printf("Vector char elements: %s\n", (char*)s.buf[i]);
