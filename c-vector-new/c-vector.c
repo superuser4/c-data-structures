@@ -10,9 +10,9 @@ typedef struct {
 } vector;
 
 void vector_init(vector* v) {
-    v->buf = malloc(sizeof(void*));
+    v->buf = malloc(0);
     v->elem = 0;
-    v->size = sizeof(void*);
+    v->size = 0;
 }
 void vector_realloc(vector * v, uint size) {
     v->size += size;
@@ -34,7 +34,11 @@ void vector_push(vector *v, void* element, uint size) {
     memcpy(v->buf[v->elem], element, size);
     v->elem++;
 }
-void vector_pop() {}
+void vector_pop(vector *v, uint size) {
+    free(v->buf[v->elem -1]);
+    v->elem--;
+    v->size -= size;
+}
 
 void vector_free(vector* v) {
     for (uint i=0;i<v->elem;i++) {
@@ -60,9 +64,16 @@ int main() {
     printf("Vector size: %u\n", v.size);
     for (uint i=0;i < v.elem; i++) {
         int num = *(int*)v.buf[i];
-        printf("Vector elements: %d\n", num);
+        printf("Vector elements: %d, size: %ld\n", num, sizeof(v.buf[i]));
+    }
+    
+    vector_pop(&v, sizeof(*(int*)v.buf[v.elem]));
+    for (uint i=0;i < v.elem; i++) {
+        int num = *(int*)v.buf[i];
+        printf("Vec elements after pop: %d\n", num);
     }
 
+    
     vector_free(&v);
     printf("Size after free: %d\n", v.size);
 }
