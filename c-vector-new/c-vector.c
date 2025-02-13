@@ -21,20 +21,6 @@ void vector_realloc(vector * v, uint size) {
     }
     
 }
-void vector_push_back(vector *v, void* element, uint size) {
-    if (v->size == v->elem * sizeof(void*)) {
-        vector_realloc(v, sizeof(void*));
-    }
-    v->buf[v->elem] = malloc(size);
-    
-    memcpy(v->buf[v->elem], element, size);
-    v->elem++;
-}
-void vector_pop_back(vector *v) {
-    free(v->buf[v->elem -1]);
-    v->elem--;
-    v->size -= sizeof(void*);
-}
 
 void vector_free(vector* v) {
     for (uint i=0;i<v->elem;i++) {
@@ -45,54 +31,80 @@ void vector_free(vector* v) {
     v->elem = 0;
 }
 
+void vector_push_back(vector *v, void* element, uint size) {
+    if (v->size == v->elem * sizeof(void*)) {
+        vector_realloc(v, sizeof(void*));
+    }
+    v->buf[v->elem] = malloc(size);
+    
+    memcpy(v->buf[v->elem], element, size);
+    v->elem++;
+}
+
+void vector_push_index(vector *v, void* element, uint size, uint index, uint shift) {
+    void* temp = realloc(v->buf[index], size);
+    if (temp != NULL) {
+        v->buf[index] = temp;
+    } else {
+        printf("Mem realloc failed!\n");
+        exit(1);
+    }
+    // we are not shifting
+    if (shift == 0) {
+        // realloc memory for the index
+        // TODO HERE
+        memcpy(v->buf[index], element, size);
+    } else if (shift == 1) { // we are shifting elements to the right before inserting at index
+        // adding spot for another element
+        if (v->size == v->elem * sizeof(void*)) {
+            vector_realloc(v, sizeof(void*));
+        }
+        // shifting elements to the right
+        v->buf[v->elem] = malloc(size);// allocate memory for the spot we created at the end of vector
+        for (int i=index; i < v->elem -1; i++) {
+            // realloc memory for each part of the vector depending on what we will insert
+            memcpy(v->buf[i+1], v->buf[i], sizeof(v->buf[i]));   
+        }
+        // inserting element at index
+
+        v->elem++;
+    }
+}
+
+void vector_pop_back(vector *v) {
+    free(v->buf[v->elem -1]);
+    v->elem--;
+    v->size -= sizeof(void*);
+}
+
 int main() {
     // demonstration
+
+    // init
     vector v;
-    int a = 1; int b = 2; int c = 3;
+    int a = 1; int b = 2;
     vector_init(&v);
+
+    // push back
     vector_push_back(&v, (void*)&a, sizeof(a)); // int vector
     vector_push_back(&v, (void*)&b, sizeof(b));
-    vector_push_back(&v, (void*)&c, sizeof(c));
-
-
-    printf("Vector element number: %u\n", v.elem);
-    printf("Vector size: %u\n", v.size);
-    for (uint i=0;i < v.elem; i++) {
+    puts("Push back:\n");
+    for (uint i=0; i < v.elem;i++) {
         int num = *(int*)v.buf[i];
-        printf("Vector elements: %d, size: %ld\n", num, sizeof(v.buf[i]));
+        printf("The elements: %d\n", num);
+    }
+    // push index
+    vector_push_index(&v, (void*)&a, sizeof(a), 1, 0);
+    puts("Push index:\n");
+    for (uint i=0; i < v.elem;i++) {
+        int num = *(int*)v.buf[i];
+        printf("The elements: %d\n", num);
     }
 
-    vector_pop_back(&v);
-    for (uint i=0;i < v.elem; i++) {
-        int num = *(int*)v.buf[i];
-        printf("Vec elements after pop: %d\n", num);
-    }
-    
+    // pop_back
+
+    // pop_index
+
+
     vector_free(&v);
-    printf("Size after free: %d\n", v.size);
-
-    puts("Second demonstration with Strings:\n");
-    
-    vector s;
-    vector_init(&s);
-    
-    char d[20] = "Hello Buddy Hey";
-    char x[20] = "World Hello Hey";
-    vector_push_back(&s, (void*)&d, strlen(d));
-    vector_push_back(&s, (void*)&x, strlen(x));
-
-
-    for (uint i=0; i < s.elem;i++) {
-        printf("Vector char elements: %s\n", (char*)s.buf[i]);
-    }
-    printf("Vector size: %u\n", s.size);
-
-    vector_pop_back(&s);
-    printf("After vector pop:\n");
-    for (uint i=0; i < s.elem;i++) {
-        printf("Vector char elements: %s\n", (char*)s.buf[i]);
-    }
-    printf("Vector size: %u\n", s.size);
-
-    return 0;
 }
