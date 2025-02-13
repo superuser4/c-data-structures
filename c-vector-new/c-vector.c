@@ -34,10 +34,10 @@ void vector_push(vector *v, void* element, uint size) {
     memcpy(v->buf[v->elem], element, size);
     v->elem++;
 }
-void vector_pop(vector *v, uint size) {
+void vector_pop(vector *v) {
     free(v->buf[v->elem -1]);
     v->elem--;
-    v->size -= size;
+    v->size -= sizeof(void*);
 }
 
 void vector_free(vector* v) {
@@ -66,14 +66,38 @@ int main() {
         int num = *(int*)v.buf[i];
         printf("Vector elements: %d, size: %ld\n", num, sizeof(v.buf[i]));
     }
-    
-    vector_pop(&v, sizeof(*(int*)v.buf[v.elem]));
+
+    vector_pop(&v);
     for (uint i=0;i < v.elem; i++) {
         int num = *(int*)v.buf[i];
         printf("Vec elements after pop: %d\n", num);
     }
-
     
     vector_free(&v);
     printf("Size after free: %d\n", v.size);
+
+    puts("Second demonstration with Strings:\n");
+    
+    vector s;
+    vector_init(&s);
+    
+    char d[20] = "Hello Buddy Hey";
+    char x[20] = "World Hello Hey";
+    vector_push(&s, (void*)&d, strlen(d));
+    vector_push(&s, (void*)&x, strlen(x));
+
+
+    for (uint i=0; i < s.elem;i++) {
+        printf("Vector char elements: %s\n", (char*)s.buf[i]);
+    }
+    printf("Vector size: %u\n", s.size);
+
+    vector_pop(&s);
+    printf("After vector pop:\n");
+    for (uint i=0; i < s.elem;i++) {
+        printf("Vector char elements: %s\n", (char*)s.buf[i]);
+    }
+    printf("Vector size: %u\n", s.size);
+
+    return 0;
 }
