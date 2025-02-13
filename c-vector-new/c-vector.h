@@ -11,10 +11,8 @@ void vector_pop_back(vector *v);
 void vector_free(vector* v);
 
 // todo
-//vector_push_index - add an element at a given index. (don't shift elements)
-//vector_pop_index - remove an element at a given index. (don't shift elements)
-//vector_push_index_shift - Insert an element at a specified index (shift elements to the right).
-//vector_pop_index_shift- Remove an element from a specific index (shift elements to the right).
+//vector_push_index - add an element at a given index. (shift elements depending on parameter)
+//vector_pop_index - remove an element at a given index. (shift elements depending on parameter)
 
 //vector_resize - Preallocate memory for the vector (resize upfront).
 //vector_clear - Remove all elements from the vector (but keep memory allocated).
