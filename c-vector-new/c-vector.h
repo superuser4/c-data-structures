@@ -1,10 +1,11 @@
 typedef struct {
     uint elem; // element number
     uint size; // size of array in bytes
+    uint type; // type of data stored, only used for char which is 1
     void** buf;
 } vector;
 
-void vector_init(vector *v);
+void vector_init(vector *v, uint size);
 void vector_realloc(vector *v, uint size);
 void vector_push_back(vector *v, void* element, uint size);
 void vector_pop_back(vector *v);
