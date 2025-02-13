@@ -2,12 +2,7 @@
 #include "string.h"
 #include "stdio.h"
 #include "stdlib.h"
-
-typedef struct {
-    uint elem; // element number
-    uint size; // size of array in bytes
-    void** buf;
-} vector;
+#include "c-vector.h"
 
 void vector_init(vector* v) {
     v->buf = malloc(0);
@@ -27,8 +22,9 @@ void vector_realloc(vector * v, uint size) {
     
 }
 void vector_push(vector *v, void* element, uint size) {
-    vector_realloc(v, sizeof(void*));
-    
+    if (v->size == v->elem * sizeof(void*)) {
+        vector_realloc(v, sizeof(void*));
+    }
     v->buf[v->elem] = malloc(size);
     
     memcpy(v->buf[v->elem], element, size);
@@ -48,7 +44,6 @@ void vector_free(vector* v) {
     v->size = 0;
     v->elem = 0;
 }
-
 
 int main() {
     // demonstration
