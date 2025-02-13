@@ -1,1 +1,1 @@
-gcc -Wall -Wextra -Wpedantic c-vector.c
+gcc -Wall -Wextra -Wpedantic -g3 c-vector.c
