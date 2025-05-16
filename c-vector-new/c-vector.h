@@ -1,17 +1,17 @@
 typedef struct {
-    uint elem; // element number
-    uint size; // size of array in bytes
-    uint type; // type of data stored, only used for char which is 1
+    uint32_t elem; // element number
+    uint32_t size; // size of array in bytes
+    uint32_t type; // type of data stored, only used for char which is 1
     void** buf;
 } vector;
 
-void vector_init(vector *v, uint size);
-void vector_realloc(vector *v, uint size);
-void vector_push_back(vector *v, void* element, uint size);
+void vector_init(vector *v, uint32_t size);
+void vector_realloc(vector *v, uint32_t size);
+void vector_push_back(vector *v, void* element, uint32_t size);
 void vector_pop_back(vector *v);
 void vector_free(vector *v);
-void vector_push_index(vector *v, void* element, uint size, uint index, uint shift); // add an element at a given index. (shift elements depending on parameter) // only shift if shift == 1
-void vector_pop_index(vector *v, uint index);  //remove an element at a given index. (shift elements to the left and fill the gap)
+void vector_push_index(vector *v, void* element, uint32_t size, uint32_t index, int shift); // add an element at a given index. (shift elements depending on parameter) // only shift if shift == 1
+void vector_pop_index(vector *v, uint32_t index);  //remove an element at a given index. (shift elements to the left and fill the gap)
 
 
 // todo
