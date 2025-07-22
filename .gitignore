@@ -1,5 +1,5 @@
-queue-rs/target
-stack-rs/target
+queue/queue-rs/target
+stack/stack-rs/target
 /c-vector-new/a.out
 /c-vector-old
 a.out
